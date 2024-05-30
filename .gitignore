@@ -1,3 +1,4 @@
-.streamlit
-.idea
-.venv
+/.streamlit
+/.idea/
+/.venv/
+/.streamlit/
