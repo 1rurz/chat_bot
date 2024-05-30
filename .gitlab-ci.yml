@@ -1,0 +1,29 @@
+stages:
+  - test
+  - build
+  - deploy
+
+test_app:
+  stage: test
+  image: python:3.11
+  script:
+    - pytest tests.py
+
+build_app:
+    stage: build
+    before_script:
+    - docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD
+    script:
+        - docker-compose build -t rurz/bot_ci_cd:python-app .
+        - docker-compose push rurz/bot_ci_cd:python-app
+
+deploy-job:
+  stage: deploy
+  environment: production
+  before_script:
+    - chmod 400 $SSH_KEY
+  script:
+    - ssh -o StrictHostKeyChecking=no $SSH_KEY rurz@192.168.64.4"
+     docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD &&
+     docker ps -aq | xargs docker stop | xargs docker rm &&
+     docker-compose up -p 8501:8501 -u $DOCKER_NAME -p $DOCKER_PASSWORD
