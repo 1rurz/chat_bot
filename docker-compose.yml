@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    image: chat_bot-app
+    build:
+      context: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    environment:
+      - STREAMLIT_SECRETS_FILE=/app/secrets.toml
