@@ -7,10 +7,14 @@ test_app:
   stage: test
   image: python:3.11
   script:
-    - pytest tests.py
+    - pip3 install -r requirements.txt
+    - pytest --version
+    - pytest tests/test.py
 
 build_app:
     stage: build
+    services:
+    - docker:20.10.16-dind
     before_script:
     - docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD
     script:
@@ -26,4 +30,4 @@ deploy-job:
     - ssh -o StrictHostKeyChecking=no $SSH_KEY rurz@192.168.64.4"
      docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD &&
      docker ps -aq | xargs docker stop | xargs docker rm &&
-     docker-compose up -p 8501:8501 -u $DOCKER_NAME -p $DOCKER_PASSWORD
+     docker-compose up -p 8501:8501 -u $DOCKER_NAME -p $DOCKER_PASSWOR
